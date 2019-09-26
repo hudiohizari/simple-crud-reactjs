@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import './App.css'
 
-import ProductItem from './Model/ProductItem.js'
-import AddProduct from './Function/AddProduct.js'
+import ProductItem from './ProductItem.js'
+import AddProduct from './AddProduct.js'
 
 const products = [
   {
@@ -27,6 +27,7 @@ class App extends Component {
 
     this.onAdd = this.onAdd.bind(this)
     this.onDelete = this.onDelete.bind(this)
+    this.onEditSubmit = this.onEditSubmit.bind(this)
   }
 
   componentDidMount(){
@@ -42,8 +43,6 @@ class App extends Component {
     const products = this.getProducts()
     products.push({ name, price })
     this.setState({ products })
-
-    console.log(this.state.products)
   }
 
   onDelete(name){
@@ -53,6 +52,20 @@ class App extends Component {
     })
 
     this.setState({ products: filteredProduct })
+  }
+
+  onEditSubmit(name, price, originalName){
+    let products = this.getProducts()
+    products = products.map(product => {
+      if (product.name === originalName) {
+        product.name = name
+        product.price = price
+      }
+
+      return product
+    })
+
+    this.setState({ products })
   }
 
   render(){
@@ -69,6 +82,7 @@ class App extends Component {
                 key = {product.name}
                 {...product}
                 onDelete = {this.onDelete}
+                onEditSubmit = {this.onEditSubmit}
               />
             )
           })
